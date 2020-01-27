@@ -1,11 +1,8 @@
-require_relative 'deck'
-
-BET = 10
-CARDS_LIMIT = 3
-
 class Player
   attr_reader :name, :cards, :bets_sum
   attr_accessor :money
+  CARDS_LIMIT = 3
+
   def initialize(name, startmoney = 100)
     @name = name
     @money = startmoney
@@ -43,14 +40,11 @@ class Player
     @bets_sum += BET
   end
 
-  def ace_in_cards?
-    return true if @cards.map(&:value).include?('ace')
-  end
-
   def cards_info
     puts "#{self.class.to_s} cards are: "
     @cards.each { |card| puts "#{card.suit} - #{card.value}"}
     puts "Score sum is: #{score_sum}"
+    puts '================================='
   end
 
   def reached_cards_limit?
@@ -59,5 +53,11 @@ class Player
 
   def in_range?
     return true if score_sum <= 21
+  end
+
+  private
+
+  def ace_in_cards?
+    return true if @cards.map(&:value).include?('ace')
   end
 end

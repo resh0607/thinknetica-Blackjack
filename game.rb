@@ -1,13 +1,7 @@
-require_relative 'card'
-require_relative 'deck'
-require_relative 'user'
-require_relative 'dealer'
-
-$bank = 0
-WIN_SCORE = 21
-
-
 class Game
+  $bank = 0
+  WIN_SCORE = 21
+
   def initialize
     greeting
   end
@@ -47,7 +41,7 @@ class Game
 
   def dealer_turn
     puts 'Now it`s dealer`s turn'
-    sleep(5)
+    sleep(3)
     if @dealer.score_sum < 17
       @dealer.get_card(@deck)
       puts 'Dealer got new card'
@@ -69,33 +63,22 @@ class Game
       puts 'Nobody wins, it`s draw!'
       draw
     elsif
-      !@user.in_range? && @dealer.in_range?
+      (!@user.in_range? && @dealer.in_range?) || (@user.in_range? && @dealer.in_range? && @user.score_sum < @dealer.score_sum)
       puts 'Dealer win!'
       dealer_win
     elsif
-      @user.in_range? && !@dealer.in_range?
+      (@user.in_range? && !@dealer.in_range?) || (@user.in_range? && @dealer.in_range? && @user.score_sum > @dealer.score_sum)
       puts 'User win!'
       user_win
-    elsif
-      @user.in_range? && @dealer.in_range? && @user.score_sum > @dealer.score_sum
-      puts 'User win!'
-      user_win
-    elsif
-      @user.in_range? && @dealer.in_range? && @user.score_sum < @dealer.score_sum
-      puts 'Dealer win!'
-      dealer_win
     end
     puts 'Want new game?(y/n)'
     answer = gets.chomp
     if answer == 'y'
       start_game
     else
-      puts 'Ok, chicken!'
-      return
+      abort 'Ok, chicken!'
     end
   end
-
-  private
 
   def players_able_to_play?
     return true unless @user.money < BET || @dealer.money < BET

@@ -1,5 +1,3 @@
-require_relative 'card'
-
 class Deck
   attr_reader :cards
   CARD_VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'jack', 'queen', 'king', 'ace']
@@ -18,8 +16,5 @@ class Deck
       end
     end
     return @cards.shuffle!
-  end
-
-  def remove_card(card)
   end
 end
