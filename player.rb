@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Player
   attr_reader :name, :cards, :bets_sum
   attr_accessor :money
@@ -16,7 +18,10 @@ class Player
   end
 
   def get_card(deck)
-    raise 'You already have 3 cards,you can check or open cards!' if reached_cards_limit?
+    if reached_cards_limit?
+      raise 'You already have 3 cards,you can check or open cards!'
+    end
+
     card = deck.cards.slice!(rand(deck.cards.length - 1))
     @cards << card
   end
@@ -24,14 +29,15 @@ class Player
   def score_sum
     score_sum ||= 0
     @cards.each do |card|
-      if card.value.is_a?(String)
-        score_sum += 10
-      else score_sum += card.value
+      score_sum += if card.value.is_a?(String)
+        10
+      else
+        card.value
       end
     end
     score_sum -= 9 if score_sum > 21 && ace_in_cards?
     score_sum += 1 if score_sum < 21 && ace_in_cards?
-    return score_sum
+    score_sum
   end
 
   def make_bet
@@ -41,8 +47,8 @@ class Player
   end
 
   def cards_info
-    puts "#{self.class.to_s} cards are: "
-    @cards.each { |card| puts "#{card.suit} - #{card.value}"}
+    puts "#{self.class} cards are: "
+    @cards.each { |card| puts "#{card.suit} - #{card.value}" }
     puts "Score sum is: #{score_sum}"
     puts '================================='
   end

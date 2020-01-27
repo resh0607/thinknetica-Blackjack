@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Game
   $bank = 0
   WIN_SCORE = 21
@@ -7,8 +9,11 @@ class Game
   end
 
   def start_game
-    raise 'Somebody lost all the money, see next time.' if !players_able_to_play?
-    reset_game 
+    unless players_able_to_play?
+      raise 'Somebody lost all the money, see next time.'
+    end
+
+    reset_game
     deal_the_cards
     user_turn
   end
@@ -30,7 +35,7 @@ class Game
         @user.get_card(@deck)
         dealer_turn
       when 3
-      open_cards
+        open_cards
       end
     rescue RuntimeError => e
       puts "Ошибка: #{e.message}"
@@ -119,6 +124,7 @@ class Game
     print "Hi, #{user_name}. Ready to start?(press any key to start or 'n' to quit: "
     answer = gets.strip
     return if answer == 'n'
+
     seed(user_name)
     start_game
   end

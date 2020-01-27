@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Deck
   attr_reader :cards
-  CARD_VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'jack', 'queen', 'king', 'ace']
-  CARD_SUITS = ['heart', 'diamond', 'club', 'spade']
+  CARD_VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'jack', 'queen', 'king', 'ace'].freeze
+  CARD_SUITS = %w[heart diamond club spade].freeze
 
   def initialize
     @cards = self.class.cards
@@ -15,6 +17,6 @@ class Deck
         @cards << card
       end
     end
-    return @cards.shuffle!
+    @cards.shuffle!
   end
 end

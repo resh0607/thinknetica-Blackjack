@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Card
   attr_reader :suit
   attr_reader :value
@@ -7,4 +9,3 @@ class Card
     @value = value
   end
 end
-
