@@ -1,11 +1,16 @@
 require_relative 'deck'
 
+BET = 10
+CARDS_LIMIT = 3
+
 class Player
-  attr_reader :money, :name, :cards
+  attr_reader :name, :cards, :bets_sum
+  attr_accessor :money
   def initialize(name, startmoney = 100)
     @name = name
     @money = startmoney
     @cards = []
+    @bets_sum = 0
   end
 
   def get_startup_cards(deck)
@@ -14,6 +19,7 @@ class Player
   end
 
   def get_card(deck)
+    raise 'You already have 3 cards,you can check or open cards!' if reached_cards_limit?
     card = deck.cards.slice!(rand(deck.cards.length - 1))
     @cards << card
   end
@@ -32,8 +38,9 @@ class Player
   end
 
   def make_bet
-    @money -= 10
-    $bank += 10
+    @money -= BET
+    $bank += BET
+    @bets_sum += BET
   end
 
   def ace_in_cards?
@@ -41,7 +48,16 @@ class Player
   end
 
   def cards_info
+    puts "#{self.class.to_s} cards are: "
     @cards.each { |card| puts "#{card.suit} - #{card.value}"}
     puts "Score sum is: #{score_sum}"
+  end
+
+  def reached_cards_limit?
+    @cards.size == CARDS_LIMIT
+  end
+
+  def in_range?
+    return true if score_sum <= 21
   end
 end
