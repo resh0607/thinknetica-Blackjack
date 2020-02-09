@@ -20,7 +20,7 @@ class Game
 
   def user_turn
     open_cards if players_reached_cards_limit?
-    puts "Now it`s your turn, you have #{@user.score_sum} scores"
+    puts "Now it`s your turn, you have #{@user.hand.score_sum} scores"
     attempts = 0
     begin
       puts "Make your choice:
@@ -32,7 +32,7 @@ class Game
       when 1
         dealer_turn
       when 2
-        @user.get_card(@deck)
+        @user.hand.get_card(@deck)
         dealer_turn
       when 3
         open_cards
@@ -47,8 +47,8 @@ class Game
   def dealer_turn
     puts 'Now it`s dealer`s turn'
     sleep(3)
-    if @dealer.score_sum < 17
-      @dealer.get_card(@deck)
+    if @dealer.hand.score_sum < 17
+      @dealer.hand.get_card(@deck)
       puts 'Dealer got new card'
     else
       puts 'Dealer checked'
@@ -57,22 +57,24 @@ class Game
   end
 
   def deal_the_cards
-    @user.get_startup_cards(@deck)
-    @dealer.get_startup_cards(@deck)
+    @user.hand.get_startup_cards(@deck)
+    @dealer.hand.get_startup_cards(@deck)
   end
 
   def open_cards
-    @user.cards_info
-    @dealer.cards_info
-    if (!@user.in_range? && !@dealer.in_range?) || @user.score_sum == @dealer.score_sum
+    puts 'User`s cards are: '
+    @user.hand.cards_info
+    puts 'Dealer`s cards are: '
+    @dealer.hand.cards_info
+    if (!@user.hand.in_range? && !@dealer.hand.in_range?) || @user.hand.score_sum == @dealer.hand.score_sum
       puts 'Nobody wins, it`s draw!'
       draw
     elsif
-      (!@user.in_range? && @dealer.in_range?) || (@user.in_range? && @dealer.in_range? && @user.score_sum < @dealer.score_sum)
+      (!@user.hand.in_range? && @dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum < @dealer.hand.score_sum)
       puts 'Dealer win!'
       dealer_win
     elsif
-      (@user.in_range? && !@dealer.in_range?) || (@user.in_range? && @dealer.in_range? && @user.score_sum > @dealer.score_sum)
+      (@user.hand.in_range? && !@dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum > @dealer.hand.score_sum)
       puts 'User win!'
       user_win
     end
@@ -104,13 +106,13 @@ class Game
 
   def reset_game
     $bank = 0
-    @user.cards.clear
-    @dealer.cards.clear
+    @user.hand.cards.clear
+    @dealer.hand.cards.clear
     @deck = Deck.new
   end
 
   def players_reached_cards_limit?
-    @user.reached_cards_limit? && @dealer.reached_cards_limit?
+    @user.hand.reached_cards_limit? && @dealer.hand.reached_cards_limit?
   end
 
   def seed(user_name)
@@ -121,7 +123,7 @@ class Game
   def greeting
     print 'Enter your name: '
     user_name = gets.chomp
-    print "Hi, #{user_name}. Ready to start?(press any key to start or 'n' to quit: "
+    print "Hi, #{user_name}. Ready to start?(press any key to start or 'n' to quit): "
     answer = gets.strip
     return if answer == 'n'
 

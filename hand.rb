@@ -34,7 +34,6 @@ class Hand
   end
 
   def cards_info
-    puts "#{self.class} cards are: "
     @cards.each { |card| puts "#{card.suit} - #{card.value}" }
     puts "Score sum is: #{score_sum}"
     puts '================================='
@@ -53,4 +52,5 @@ class Hand
   def ace_in_cards?
     return true if @cards.map(&:value).include?('ace')
   end
+end
  
