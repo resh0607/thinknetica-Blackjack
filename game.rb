@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative 'interface'
 
 class Game
   $bank = 0
@@ -10,7 +11,8 @@ class Game
 
   def start_game
     unless players_able_to_play?
-      raise 'Somebody lost all the money, see next time.'
+      Interface.no_money
+      abort
     end
 
     reset_game
@@ -20,13 +22,10 @@ class Game
 
   def user_turn
     open_cards if players_reached_cards_limit?
-    puts "Now it`s your turn, you have #{@user.hand.score_sum} scores"
+    Interface.turn(@user)
     attempts = 0
     begin
-      puts "Make your choice:
-      \t1.Check
-      \t2.Get new card
-      \t3.Open cards"
+      Interface.show_menu
       choice = gets.to_i
       case choice
       when 1
@@ -45,13 +44,13 @@ class Game
   end
 
   def dealer_turn
-    puts 'Now it`s dealer`s turn'
+    Interface.turn(@dealer)
     sleep(3)
     if @dealer.hand.score_sum < 17
       @dealer.hand.get_card(@deck)
-      puts 'Dealer got new card'
+      Interface.got_card(@dealer)
     else
-      puts 'Dealer checked'
+      Interface.checked(@dealer)
     end
     user_turn
   end
@@ -59,6 +58,8 @@ class Game
   def deal_the_cards
     @user.hand.get_startup_cards(@deck)
     @dealer.hand.get_startup_cards(@deck)
+    @user.make_bet
+    @dealer.make_bet
   end
 
   def open_cards
@@ -67,23 +68,20 @@ class Game
     puts 'Dealer`s cards are: '
     @dealer.hand.cards_info
     if (!@user.hand.in_range? && !@dealer.hand.in_range?) || @user.hand.score_sum == @dealer.hand.score_sum
-      puts 'Nobody wins, it`s draw!'
       draw
     elsif
       (!@user.hand.in_range? && @dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum < @dealer.hand.score_sum)
-      puts 'Dealer win!'
       dealer_win
     elsif
       (@user.hand.in_range? && !@dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum > @dealer.hand.score_sum)
-      puts 'User win!'
       user_win
     end
-    puts 'Want new game?(y/n)'
-    answer = gets.chomp
+    answer = Interface.ask("Want new game?(type 'y' to continue)")
     if answer == 'y'
       start_game
     else
-      abort 'Ok, chicken!'
+      Interface.say_bye
+      abort
     end
   end
 
@@ -92,16 +90,19 @@ class Game
   end
 
   def draw
+    Interface.draw
     @user.money += @user.bets_sum
     @dealer.money += @dealer.bets_sum
   end
 
   def user_win
     @user.money += $bank
+    Interface.show_winner(@user)
   end
 
   def dealer_win
     @dealer.money += $bank
+    Interface.show_winner(@dealer)
   end
 
   def reset_game
@@ -121,11 +122,8 @@ class Game
   end
 
   def greeting
-    print 'Enter your name: '
-    user_name = gets.chomp
-    print "Hi, #{user_name}. Ready to start?(press any key to start or 'n' to quit): "
-    answer = gets.strip
-    return if answer == 'n'
+    user_name = Interface.ask('What is your name?')
+    Interface.welcome_message(user_name)
 
     seed(user_name)
     start_game
