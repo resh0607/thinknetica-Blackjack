@@ -57,10 +57,10 @@ class Game
   end
 
   def deal_the_cards
-    @user.hand.get_startup_cards(@deck)
-    @dealer.hand.get_startup_cards(@deck)
-    @user.make_bet
-    @dealer.make_bet
+    @players.each do |player|
+      player.hand.get_startup_cards(@deck)
+      player.make_bet
+    end
   end
 
   def open_cards
@@ -68,15 +68,7 @@ class Game
     @user.hand.cards_info
     puts 'Dealer`s cards are: '
     @dealer.hand.cards_info
-    if (!@user.hand.in_range? && !@dealer.hand.in_range?) || @user.hand.score_sum == @dealer.hand.score_sum
-      draw
-    elsif
-      (!@user.hand.in_range? && @dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum < @dealer.hand.score_sum)
-      dealer_win
-    elsif
-      (@user.hand.in_range? && !@dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum > @dealer.hand.score_sum)
-      user_win
-    end
+    determine_winner
     answer = Interface.ask("Want new game?(type 'y' to continue)")
     if answer == 'y'
       start_game
@@ -120,6 +112,7 @@ class Game
   def seed(user_name)
     @user = User.new(user_name)
     @dealer = Dealer.new
+    @players = [@user, @dealer]
   end
 
   def greeting
@@ -128,5 +121,27 @@ class Game
 
     seed(user_name)
     start_game
+  end
+
+  def determine_winner
+    if draw_condition?
+      draw
+    elsif dealer_win_condition?     
+      dealer_win
+    elsif user_win_condition? 
+      user_win
+    end
+  end
+
+  def draw_condition?
+    (!@user.hand.in_range? && !@dealer.hand.in_range?) || @user.hand.score_sum == @dealer.hand.score_sum
+  end
+
+  def dealer_win_condition?
+    (!@user.hand.in_range? && @dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum < @dealer.hand.score_sum)
+  end
+
+  def user_win_condition?
+    (@user.hand.in_range? && !@dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum > @dealer.hand.score_sum)
   end
 end
