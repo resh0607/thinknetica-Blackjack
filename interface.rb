@@ -3,18 +3,14 @@
 class Interface
   class << self
     def welcome_message(user_name)
-      puts "Hi, #{user_name}. Ready to start?(press any key to start or 'n' to quit): "
+      print "Hi, #{user_name}. Ready to start?(press any key to start or 'n' to quit): "
       answer = gets.strip
       return if answer == 'n'
     end
 
-    def ask(question)
-      print question + ' '
-      gets.chomp
-    end
-
     def turn(player)
       puts "Now it`s #{player.name} turn."
+      thinking if player.is_a?(Dealer)
       puts "Score: #{player.hand.score_sum} scores" if player.is_a?(User)
     end
 
@@ -34,7 +30,7 @@ class Interface
     end
 
     def show_winner(player)
-      puts "#{player.name} win.\nTotal money: #{player.money}"
+      puts "#{player.name} win."
     end
 
     def say_bye
@@ -50,7 +46,38 @@ class Interface
     end
 
     def cards_info(player)
-      puts "#{player.name}`s cards: #{player.hand.cards_info}"
+      puts "#{player.name}`s cards: "
+      player.hand.cards_info
+    end
+
+    def error_message(message)
+      puts "Error: #{message}"
+    end
+
+    def ask_name
+      print 'What is your name? '
+      answer = gets.chomp.capitalize
+    end
+
+    def ask_new_game
+      print "Want new game?(type 'y' to continue): "
+      answer = gets.strip
+    end
+
+    def score_sum(score_sum)
+      puts "Score sum is: #{score_sum}"
+      puts '================================='
+    end
+
+    def show_money(player)
+      puts "You have #{player.money}$."
+    end
+
+    def thinking
+      5.times do 
+        puts '.'
+        sleep(0.7)
+      end
     end
   end
 end

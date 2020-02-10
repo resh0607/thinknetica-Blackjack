@@ -37,8 +37,7 @@ class Hand
 
   def cards_info
     @cards.each { |card| puts "#{card.suit} - #{card.value}" }
-    puts "Score sum is: #{score_sum}"
-    puts '================================='
+    Interface.score_sum(score_sum)
   end
 
   def reached_cards_limit?

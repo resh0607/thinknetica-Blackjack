@@ -38,7 +38,7 @@ class Game
         open_cards
       end
     rescue RuntimeError => e
-      puts "Ошибка: #{e.message}"
+      Interface.error_message(e.message)
       attempts += 1
       retry if attempts < 3
     end
@@ -46,7 +46,6 @@ class Game
 
   def dealer_turn
     Interface.turn(@dealer)
-    sleep(3)
     if @dealer.hand.score_sum < 17
       @dealer.hand.get_card(@deck)
       Interface.got_card(@dealer)
@@ -64,14 +63,11 @@ class Game
   end
 
   def open_cards
-    # puts 'User`s cards are: '
-    # @user.hand.cards_info
-    # puts 'Dealer`s cards are: '
-    # @dealer.hand.cards_info
     Interface.cards_info(@user)
     Interface.cards_info(@dealer)
     determine_winner
-    answer = Interface.ask("Want new game?(type 'y' to continue)")
+    Interface.show_money(@user)
+    answer = Interface.ask_new_game
     if answer == 'y'
       start_game
     else
@@ -118,7 +114,7 @@ class Game
   end
 
   def greeting
-    user_name = Interface.ask('What is your name?')
+    user_name = Interface.ask_name
     Interface.welcome_message(user_name)
 
     seed(user_name)
