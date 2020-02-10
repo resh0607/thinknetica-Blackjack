@@ -64,10 +64,12 @@ class Game
   end
 
   def open_cards
-    puts 'User`s cards are: '
-    @user.hand.cards_info
-    puts 'Dealer`s cards are: '
-    @dealer.hand.cards_info
+    # puts 'User`s cards are: '
+    # @user.hand.cards_info
+    # puts 'Dealer`s cards are: '
+    # @dealer.hand.cards_info
+    Interface.cards_info(@user)
+    Interface.cards_info(@dealer)
     determine_winner
     answer = Interface.ask("Want new game?(type 'y' to continue)")
     if answer == 'y'

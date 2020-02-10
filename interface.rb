@@ -48,5 +48,9 @@ class Interface
     def no_money
       puts 'Somebody lost all the money, see next time.'
     end
+
+    def cards_info(player)
+      puts "#{player.name}`s cards: #{player.hand.cards_info}"
+    end
   end
 end
