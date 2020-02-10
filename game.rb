@@ -124,22 +124,25 @@ class Game
   def determine_winner
     if draw_condition?
       draw
-    elsif dealer_win_condition?     
+    elsif dealer_win_condition?
       dealer_win
-    elsif user_win_condition? 
+    elsif user_win_condition?
       user_win
     end
   end
 
   def draw_condition?
-    (!@user.hand.in_range? && !@dealer.hand.in_range?) || @user.hand.score_sum == @dealer.hand.score_sum
+    (!@user.hand.in_range? && !@dealer.hand.in_range?) ||
+      (@user.hand.score_sum == @dealer.hand.score_sum)
   end
 
   def dealer_win_condition?
-    (!@user.hand.in_range? && @dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum < @dealer.hand.score_sum)
+    (!@user.hand.in_range? && @dealer.hand.in_range?) ||
+      (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum < @dealer.hand.score_sum)
   end
 
   def user_win_condition?
-    (@user.hand.in_range? && !@dealer.hand.in_range?) || (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum > @dealer.hand.score_sum)
+    (@user.hand.in_range? && !@dealer.hand.in_range?) ||
+      (@user.hand.in_range? && @dealer.hand.in_range? && @user.hand.score_sum > @dealer.hand.score_sum)
   end
 end

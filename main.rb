@@ -9,4 +9,4 @@ require_relative 'card'
 require_relative 'game'
 
 BET = 10
-game = Game.new
+Game.new

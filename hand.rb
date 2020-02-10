@@ -24,11 +24,7 @@ class Hand
   def score_sum
     score_sum ||= 0
     @cards.each do |card|
-      score_sum += if card.value.is_a?(String)
-                     10
-                   else
-                     card.value
-      end
+      score_sum += card.value.is_a?(String) ? 10 : card.value
     end
     score_sum -= 9 if score_sum > 21 && ace_in_cards?
     score_sum += 1 if score_sum < 21 && ace_in_cards?

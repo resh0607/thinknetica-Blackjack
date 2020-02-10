@@ -56,12 +56,12 @@ class Interface
 
     def ask_name
       print 'What is your name? '
-      answer = gets.chomp.capitalize
+      gets.chomp.capitalize
     end
 
     def ask_new_game
       print "Want new game?(type 'y' to continue): "
-      answer = gets.strip
+      gets.strip
     end
 
     def score_sum(score_sum)
@@ -74,7 +74,7 @@ class Interface
     end
 
     def thinking
-      5.times do 
+      5.times do
         puts '.'
         sleep(0.7)
       end
