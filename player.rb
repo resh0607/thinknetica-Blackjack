@@ -11,10 +11,9 @@ class Player
     @hand = Hand.new
   end
 
-  def make_bet 
+  def make_bet
     @money -= BET
     $bank += BET
     @bets_sum += BET
   end
 end
-

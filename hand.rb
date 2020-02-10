@@ -1,4 +1,6 @@
-class Hand 
+# frozen_string_literal: true
+
+class Hand
   attr_reader :cards
   CARDS_LIMIT = 3
 
@@ -23,9 +25,9 @@ class Hand
     score_sum ||= 0
     @cards.each do |card|
       score_sum += if card.value.is_a?(String)
-        10
-      else
-        card.value
+                     10
+                   else
+                     card.value
       end
     end
     score_sum -= 9 if score_sum > 21 && ace_in_cards?
@@ -53,4 +55,3 @@ class Hand
     return true if @cards.map(&:value).include?('ace')
   end
 end
- 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Interface
   class << self
     def welcome_message(user_name)
@@ -13,9 +15,7 @@ class Interface
 
     def turn(player)
       puts "Now it`s #{player.name} turn."
-      if player.kind_of?(User)
-        puts "Score: #{player.hand.score_sum} scores"
-      end
+      puts "Score: #{player.hand.score_sum} scores" if player.is_a?(User)
     end
 
     def show_menu
@@ -35,7 +35,6 @@ class Interface
 
     def show_winner(player)
       puts "#{player.name} win.\nTotal money: #{player.money}"
-
     end
 
     def say_bye
